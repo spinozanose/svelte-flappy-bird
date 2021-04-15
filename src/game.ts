@@ -50,7 +50,7 @@ export class GameController {
         //
         public readonly groundHeight = 20,
         //
-        public readonly birdX = 40,
+        public readonly birdY = 40,
         public readonly birdSize = 20,
         public readonly gravity = 1.5,
         public readonly jumpVelocity = 10,
@@ -70,7 +70,7 @@ export class GameController {
             gameOver: false,
             gameStarted: false,
             bird: {
-                left: this.birdX,
+                left: this.birdY,
                 top: this.height / 2 - this.birdSize /2,
                 size: this.birdSize
             },
@@ -107,12 +107,12 @@ export class GameController {
         }
 
         // Add score
-        if (this.frame.firstPipe.left + this.pipeWidth == this.birdX - this.speed) {
+        if (this.frame.firstPipe.left + this.pipeWidth == this.birdY - this.speed) {
             this.frame.score += 1;
         }
     
         // Add Score
-        if (this.frame.secondPipe.left + this.pipeWidth == this.birdX - this.speed) {
+        if (this.frame.secondPipe.left + this.pipeWidth == this.birdY - this.speed) {
             this.frame.score += 1;
         }
 
@@ -166,8 +166,8 @@ export class GameController {
 
     private checkPipe(left: number) {
         return (
-            left <= this.birdX + this.birdSize
-            && left + this.pipeWidth >= this.birdX
+            left <= this.birdY + this.birdSize
+            && left + this.pipeWidth >= this.birdY
         );
     }
 

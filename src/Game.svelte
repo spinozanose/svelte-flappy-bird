@@ -81,7 +81,7 @@
     {JSON.stringify(frame, null, 2)}
 </pre> -->
 
-<main style="width: {frame.width}px; height: {frame.height}px;" 
+<main id="flappy_bird" style="width: {frame.width}px; height: {frame.height}px;" 
     class="game">
     <section id="score">{frame.score}</section>
     <Bird bird="{frame.bird}" />
