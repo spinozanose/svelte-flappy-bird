@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {GameController} from "./game";
+    import {GameController} from "../game";
     import Pipe from './Pipe.svelte'
     import Bird from './Bird.svelte'
 
@@ -84,7 +84,7 @@
 <main id="flappy_bird" style="width: {frame.width}px; height: {frame.height}px;" 
     class="game">
     <section id="score">{frame.score}</section>
-    <Bird bird="{frame.bird}" />
+    <Bird size="{frame.bird.size}" top="{frame.birdTop}" left="{frame.birdLeft}" color="{frame.bird.color}" wings="{frame.bird.wings}"/>
     <Pipe pipe="{frame.firstPipe}" />
     <Pipe pipe="{frame.secondPipe}" />
     {#if frame.gameOver || !frame.gameStarted}

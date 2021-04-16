@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PipePair } from "./game";
+    import type { PipePair } from "../game";
     export let pipe: PipePair
 </script>
 

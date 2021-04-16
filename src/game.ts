@@ -1,6 +1,8 @@
 export interface Frame {
     firstPipe: PipePair;
     secondPipe: PipePair;
+    birdTop: number;
+    birdLeft: number;
     bird: Bird;
     gameOver: boolean;
     gameStarted: boolean;
@@ -11,9 +13,9 @@ export interface Frame {
 }
 
 export interface Bird {
-    top: number;
-    left: number;
+    color: string;
     size: number;
+    wings: string;
 }
 
 export interface Ground {
@@ -38,7 +40,7 @@ export class GameController {
     private velocity = 0;
 
     constructor(
-        public readonly height = 700, 
+        public readonly height = 600, 
         public readonly width = 400,
         //
         public readonly pipeWidth = 50,
@@ -50,7 +52,8 @@ export class GameController {
         //
         public readonly groundHeight = 20,
         //
-        public readonly birdY = 40,
+        public readonly birdColor = "yellow",
+        public readonly birdX = 40,
         public readonly birdSize = 20,
         public readonly gravity = 1.5,
         public readonly jumpVelocity = 10,
@@ -69,10 +72,12 @@ export class GameController {
             height: this.height,
             gameOver: false,
             gameStarted: false,
+            birdLeft: this.birdX,
+            birdTop: this.height / 2 - this.birdSize /2,
             bird: {
-                left: this.birdY,
-                top: this.height / 2 - this.birdSize /2,
-                size: this.birdSize
+                color: this.birdColor,
+                size: this.birdSize,
+                wings: "U"
             },
             ground: { height: this.groundHeight}
         }
@@ -93,10 +98,10 @@ export class GameController {
             this.frame.firstPipe
         );
 
-        if ( this.frame.bird.top >= 
+        if ( this.frame.birdTop >= 
             this.height - this.groundHeight - this.birdSize
         ) {
-            this.frame.bird.top = this.height - this.groundHeight - this.birdSize;
+            this.frame.birdTop = this.height - this.groundHeight - this.birdSize;
             this.frame.gameOver = true;
             return this.frame;
         }
@@ -107,21 +112,23 @@ export class GameController {
         }
 
         // Add score
-        if (this.frame.firstPipe.left + this.pipeWidth == this.birdY - this.speed) {
+        if (this.frame.firstPipe.left + this.pipeWidth == this.birdX - this.speed) {
             this.frame.score += 1;
         }
     
         // Add Score
-        if (this.frame.secondPipe.left + this.pipeWidth == this.birdY - this.speed) {
+        if (this.frame.secondPipe.left + this.pipeWidth == this.birdX - this.speed) {
             this.frame.score += 1;
         }
 
         // Gravity
         if (this.velocity > 0 ) {
             this.velocity -= this.slowVelocityBy;
+        } else {
+            this.frame.bird.wings = "U";
         }
 
-        this.frame.bird.top += Math.pow(this.gravity, 2) - this.velocity
+        this.frame.birdTop += Math.pow(this.gravity, 2) - this.velocity
 
         return this.frame
     }
@@ -135,6 +142,7 @@ export class GameController {
     public jump() {
         if (this.velocity <= 0) {
             this.velocity += this.jumpVelocity;
+            this.frame.bird.wings = "D";
         }
     }
 
@@ -144,8 +152,8 @@ export class GameController {
           this.checkPipe(this.frame.firstPipe.left)
         ) {
           return !(
-            this.frame.bird.top > this.frame.firstPipe.topPipe.height &&
-            this.frame.bird.top + this.birdSize <
+            this.frame.birdTop > this.frame.firstPipe.topPipe.height &&
+            this.frame.birdTop + this.birdSize <
               this.frame.firstPipe.bottomPipe.top
           );
         }
@@ -155,8 +163,8 @@ export class GameController {
           this.checkPipe(this.frame.secondPipe.left)
         ) {
           return !(
-            this.frame.bird.top > this.frame.secondPipe.topPipe.height &&
-            this.frame.bird.top + this.birdSize <
+            this.frame.birdTop > this.frame.secondPipe.topPipe.height &&
+            this.frame.birdTop + this.birdSize <
               this.frame.secondPipe.bottomPipe.top
           );
         }
@@ -166,8 +174,8 @@ export class GameController {
 
     private checkPipe(left: number) {
         return (
-            left <= this.birdY + this.birdSize
-            && left + this.pipeWidth >= this.birdY
+            left <= this.birdX + this.birdSize
+            && left + this.pipeWidth >= this.birdX
         );
     }
 
